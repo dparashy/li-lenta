@@ -5,10 +5,8 @@
 
 
 every 1.day, :at => '11:55 pm' do
-  command "cd /home/deployer/listat/current && /usr/bin/ruby parser.rb"
+  command 'cd /home/deployer/listat/current && bundle exec ruby parser.rb'
 end
-
-env :PATH, '/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin'
 
 # Example:
 #
