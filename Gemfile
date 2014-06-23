@@ -4,4 +4,9 @@ gem 'sqlite3'
 gem 'nokogiri'
 gem 'gruff'
 gem 'whenever'
-gem 'capistrano', '~> 3.2.0'
+
+group :deployment do
+  gem 'capistrano', '~> 3.1'
+  gem 'capistrano-rbenv', '~> 2.0'
+  gem 'capistrano-bundler', '~> 1.1.2'
+end
