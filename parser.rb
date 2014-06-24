@@ -8,25 +8,29 @@ require 'gruff'
 
 class Parser
 
+  URL = "http://www.li.ru/rating/media/"
+
   def initialize
     SQLite3::Database.new 'li.sqlite3'
     @db = SQLite3::Database.open 'li.sqlite3'
     @db.execute "CREATE TABLE IF NOT EXISTS stats(time DATETIME, visits INT)"
     #@db.execute "DELETE FROM stats"
+    
+    @time = Time.now
   end
 
   def parse
     # Parsing the stats
-    page = Nokogiri::HTML(open("http://www.li.ru/rating/media/"))
+    page = Nokogiri::HTML(open(URL))
     lenta_link = page.xpath("//a[text()='Lenta.Ru']").first
     lenta_count = lenta_link.parent.parent.xpath('td').last.text
     lenta_count = lenta_count.gsub(/\D/, '').to_i
-    @db.execute "INSERT INTO stats VALUES('#{Time.now}', #{lenta_count})"
+    @db.execute "INSERT INTO stats VALUES('#{@time}', #{lenta_count})"
   end
   
   def plot
     # Preparing data
-    sql = "SELECT * from STATS WHERE time > CAST('#{sprintf("%02d%02d", Time.now.year, Time.now.month)}01' as datetime) ORDER BY time ASC"
+    sql = "SELECT * from STATS WHERE time > CAST('#{@time.strftime "%Y%m"}01' as datetime) ORDER BY time ASC"
     data = @db.execute(sql)
     
     points = data.map(&:last)
@@ -38,14 +42,19 @@ class Parser
     
     # Plotting graph
     g = Gruff::Bar.new(2000)
-    g.title = "LiveInternet - #{Date::MONTHNAMES[Date.today.month]} #{Time.now.year}" 
+    g.title = "LiveInternet - #{@time.strftime "%B %Y"}" 
     g.labels = labels
     g.data 'Lenta.Ru', points
     g.marker_font_size = 11
-    g.write sprintf("graphs/%d-%02d.png", Time.now.year, Time.now.month)
+    g.write "graphs/#{@time.strftime "%Y-%m"}.png"
+  end
+  
+  def log_page
+    `curl --silent -o pages/#{@time.strftime "%Y-%m-%d"}.html #{URL}`
   end
   
   def run
+    log_page
     parse
     plot
   end

@@ -1,3 +1,4 @@
 .project
 li.sqlite3
-
+graphs/*
+pages/*
