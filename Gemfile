@@ -5,6 +5,7 @@ gem 'nokogiri'
 gem 'gruff'
 gem 'whenever'
 gem 'mail'
+gem 'mailcatcher'
 
 group :deployment do
   gem 'capistrano', '~> 3.1'

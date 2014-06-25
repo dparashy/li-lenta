@@ -16,12 +16,25 @@ GEM
       sshkit (~> 1.3)
     chronic (0.10.2)
     colorize (0.7.3)
+    daemons (1.1.9)
+    eventmachine (1.0.3)
     gruff (0.5.1)
       rmagick
+    haml (4.0.5)
+      tilt
     i18n (0.6.9)
     mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
+    mailcatcher (0.5.12)
+      activesupport (~> 3.0)
+      eventmachine (~> 1.0.0)
+      haml (>= 3.1, < 5)
+      mail (~> 2.3)
+      sinatra (~> 1.2)
+      skinny (~> 0.2.3)
+      sqlite3 (~> 1.3)
+      thin (~> 1.5.0)
     mime-types (1.25.1)
     mini_portile (0.6.0)
     multi_json (1.10.1)
@@ -31,13 +44,28 @@ GEM
     nokogiri (1.6.2.1)
       mini_portile (= 0.6.0)
     polyglot (0.3.4)
+    rack (1.4.5)
+    rack-protection (1.5.3)
+      rack
     rake (10.3.2)
     rmagick (2.13.2)
+    sinatra (1.4.5)
+      rack (~> 1.4)
+      rack-protection (~> 1.4)
+      tilt (~> 1.3, >= 1.3.4)
+    skinny (0.2.3)
+      eventmachine (~> 1.0.0)
+      thin (~> 1.5.0)
     sqlite3 (1.3.9)
     sshkit (1.5.1)
       colorize
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
+    thin (1.5.1)
+      daemons (>= 1.0.9)
+      eventmachine (>= 0.12.6)
+      rack (>= 1.0.0)
+    tilt (1.4.1)
     treetop (1.4.15)
       polyglot
       polyglot (>= 0.3.1)
@@ -54,6 +82,7 @@ DEPENDENCIES
   capistrano-rbenv (~> 2.0)
   gruff
   mail
+  mailcatcher
   nokogiri
   sqlite3
   whenever

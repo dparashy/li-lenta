@@ -59,19 +59,16 @@ class Parser
     title = "LiveInternet statistics for Lenta.Ru #{@time.strftime "%Y-%m-%d"}"
 
     Mail.defaults do
-      delivery_method :sendmail
+      #delivery_method :sendmail
+      delivery_method :smtp, address: "localhost", port: 1025
     end
 
     mail = Mail.new do
       from    'noreply@example.com'
       to      'a.krasnoshchekov@lenta-co.ru, akrasnoschekov@gmail.com'
       subject title
-
-      html_part do
-        content_type 'text/html; charset=UTF-8'
-        body File.read(filename)
-      end
-
+      content_type 'text/html; charset=UTF-8'
+      body File.read(filename)
     end
 
     mail.deliver
