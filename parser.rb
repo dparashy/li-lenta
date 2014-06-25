@@ -57,6 +57,12 @@ class Parser
   def mail_page
     filename = "pages/#{@time.strftime "%Y-%m-%d"}.html"
     title = "LiveInternet statistics for Lenta.Ru #{@time.strftime "%Y-%m-%d"}"
+    addresses = [
+               'a.belonovsky@lenta-co.ru',
+               'v.kobenkova@lenta-co.ru',
+               'a.lomakin@lenta-co.ru',
+               'a.krasnoshchekov@lenta-co.ru'
+             ]
 
     Mail.defaults do
       delivery_method :sendmail
@@ -65,7 +71,7 @@ class Parser
 
     mail = Mail.new do
       from    'noreply@example.com'
-      to      'a.krasnoshchekov@lenta-co.ru, akrasnoschekov@gmail.com'
+      to      addresses.join(',')
       subject title
       content_type 'text/html; charset=UTF-8'
       body File.read(filename)
