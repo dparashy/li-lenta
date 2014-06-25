@@ -66,10 +66,14 @@ class Parser
       from    'noreply@example.com'
       to      'a.krasnoshchekov@lenta-co.ru, akrasnoschekov@gmail.com'
       subject title
-      body    File.read(filename)
+
+      html_part do
+        content_type 'text/html; charset=UTF-8'
+        body File.read(filename)
+      end
+
     end
 
-    mail.charset = 'utf-8'
     mail.deliver
   end
 
