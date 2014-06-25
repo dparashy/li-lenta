@@ -5,6 +5,7 @@ require 'sqlite3'
 require 'open-uri'
 require 'nokogiri'
 require 'gruff'
+require 'mail'
 
 class Parser
 
@@ -52,11 +53,31 @@ class Parser
   def log_page
     `curl --silent -o pages/#{@time.strftime "%Y-%m-%d"}.html #{URL}`
   end
-  
+
+  def mail_page
+    filename = "pages/#{@time.strftime "%Y-%m-%d"}.html"
+    title = "LiveInternet statistics for Lenta.Ru #{@time.strftime "%Y-%m-%d"}"
+
+    Mail.defaults do
+      delivery_method :sendmail
+    end
+
+    mail = Mail.new do
+      from    'noreply@example.com'
+      to      'a.krasnoshchekov@lenta.ru'
+      subject title
+      body    File.read(filename)
+    end
+
+    mail.charset = 'utf-8'
+    mail.deliver
+  end
+
   def run
-    log_page
     parse
     plot
+    log_page
+    mail_page
   end
 
 end
