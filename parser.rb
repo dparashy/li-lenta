@@ -64,7 +64,7 @@ class Parser
 
     mail = Mail.new do
       from    'noreply@example.com'
-      to      'a.krasnoshchekov@lenta.ru'
+      to      'a.krasnoshchekov@lenta-co.ru, akrasnoschekov@gmail.com'
       subject title
       body    File.read(filename)
     end
