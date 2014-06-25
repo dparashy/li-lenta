@@ -59,8 +59,8 @@ class Parser
     title = "LiveInternet statistics for Lenta.Ru #{@time.strftime "%Y-%m-%d"}"
 
     Mail.defaults do
-      #delivery_method :sendmail
-      delivery_method :smtp, address: "localhost", port: 1025
+      delivery_method :sendmail
+      #delivery_method :smtp, address: "localhost", port: 1025
     end
 
     mail = Mail.new do
