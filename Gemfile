@@ -4,8 +4,7 @@ gem 'sqlite3'
 gem 'nokogiri'
 gem 'gruff'
 gem 'whenever'
-gem 'mail'
-gem 'mailcatcher'
+gem 'mandrill-api'
 
 group :deployment do
   gem 'capistrano', '~> 3.1'

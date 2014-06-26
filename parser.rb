@@ -5,7 +5,7 @@ require 'sqlite3'
 require 'open-uri'
 require 'nokogiri'
 require 'gruff'
-require 'mail'
+require 'mandrill'
 
 class Parser
 
@@ -56,35 +56,52 @@ class Parser
 
   def mail_page
     filename = "pages/#{@time.strftime "%Y-%m-%d"}.html"
-    title = "LiveInternet statistics for Lenta.Ru #{@time.strftime "%Y-%m-%d"}"
+    title = 
     addresses = [
                #'a.belonovsky@lenta-co.ru',
                #'v.kobenkova@lenta-co.ru',
                'a.lomakin@lenta-co.ru',
                'a.krasnoshchekov@lenta-co.ru'
              ]
-
-    Mail.defaults do
-      delivery_method :sendmail
-      #delivery_method :smtp, address: "localhost", port: 1025
+    
+    begin
+      mandrill = Mandrill::API.new '8Xx06y45dEkqk1wJMdUilg'
+      message = {
+        "html" => File.read(filename),
+        "subject" => "Lenta.Ru@LiveInternet #{@time.strftime "%Y-%m-%d"}",
+        "from_email" => "noreply-stats@lenta-co.ru",
+        "from_name" => "Lenta Statistics",
+        "to" =>
+           [
+             {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"},
+             {"email"=>"akrasnoschekov@gmail.com", "type"=>"to"}
+           ]
+      }
+      async = false
+      ip_pool = "Main Pool"
+      send_at = nil
+      result = mandrill.messages.send message, async, ip_pool, send_at
+    rescue Mandrill::Error => e
+        puts "A mandrill error occurred: #{e.class} - #{e.message}"
+        raise
     end
-
-    mail = Mail.new do
-      from    'noreply@example.com'
-      to      addresses.join(',')
-      subject title
-      content_type 'text/html; charset=UTF-8'
-      body File.read(filename)
-    end
-
-    mail.deliver
   end
 
   def run
+    puts "#{Time.now} parsing page"
     parse
+
+    puts "#{Time.now} plotting graphic"
     plot
+
+    puts "#{Time.now} logging page"
     log_page
+
+    puts "#{Time.now} mailing  page"
     mail_page
+
+    puts "#{Time.now} all done"
   end
 
 end
