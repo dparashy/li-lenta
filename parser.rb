@@ -55,28 +55,19 @@ class Parser
   end
 
   def mail_page
-    filename = "pages/#{@time.strftime "%Y-%m-%d"}.html"
-    title = 
-    addresses = [
-               #'a.belonovsky@lenta-co.ru',
-               #'v.kobenkova@lenta-co.ru',
-               'a.lomakin@lenta-co.ru',
-               'a.krasnoshchekov@lenta-co.ru'
-             ]
-    
     begin
       mandrill = Mandrill::API.new '8Xx06y45dEkqk1wJMdUilg'
       message = {
-        "html" => File.read(filename),
+        "html" => File.read("pages/#{@time.strftime "%Y-%m-%d"}.html"),
         "subject" => "Lenta.Ru@LiveInternet #{@time.strftime "%Y-%m-%d"}",
         "from_email" => "noreply-stats@lenta-co.ru",
         "from_name" => "Lenta Statistics",
         "to" =>
            [
              {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
-             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"}
-             #{"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
-             #{"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
+             {"email"=>"akrasnoschekov@gmail.com", "type"=>"to"},
+             {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
+             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
            ]
       }
       async = false

@@ -4,7 +4,7 @@
 # http://en.wikipedia.org/wiki/Cron
 
 
-every 1.day, :at => '2:55 pm' do
+every 1.day, :at => '23:55' do
   command 'cd /home/deployer/listat/current && /home/deployer/.rbenv/versions/2.1.2/bin/bundle exec ruby parser.rb >> crontab.log &2>1'
 end
 
