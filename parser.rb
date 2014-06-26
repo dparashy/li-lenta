@@ -58,8 +58,8 @@ class Parser
     filename = "pages/#{@time.strftime "%Y-%m-%d"}.html"
     title = "LiveInternet statistics for Lenta.Ru #{@time.strftime "%Y-%m-%d"}"
     addresses = [
-               'a.belonovsky@lenta-co.ru',
-               'v.kobenkova@lenta-co.ru',
+               #'a.belonovsky@lenta-co.ru',
+               #'v.kobenkova@lenta-co.ru',
                'a.lomakin@lenta-co.ru',
                'a.krasnoshchekov@lenta-co.ru'
              ]

@@ -5,7 +5,7 @@
 
 
 every 1.day, :at => '11:55 pm' do
-  command 'cd /home/deployer/listat/current && /home/deployer/.rbenv/versions/2.1.2/bin/bundle exec ruby parser.rb'
+  command 'cd /home/deployer/listat/current && /home/deployer/.rbenv/versions/2.1.2/bin/bundle exec ruby parser.rb >> crontab.log'
 end
 
 # Example:
