@@ -3,9 +3,10 @@
 # It's helpful, but not entirely necessary to understand cron before proceeding.
 # http://en.wikipedia.org/wiki/Cron
 
+RBENV_INIT = 'export PATH=/home/deployer/.rbenv/shims:/home/deployer/.rbenv/bin:$PATH;eval "$(rbenv init -)";'
 
 every 1.minutes do
-  command 'cd /home/deployer/listat/current && /home/deployer/.rbenv/versions/2.1.2/bin/bundle exec ruby parser.rb >> crontab.log &2>1'
+  command RBENV_INIT + 'cd /home/deployer/listat/current && bundle exec ruby parser.rb >> crontab.log 2>&1'
 end
 
 # Example:
