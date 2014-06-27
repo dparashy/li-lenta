@@ -16,7 +16,7 @@ class Parser
     @db = SQLite3::Database.open 'li.sqlite3'
     @db.execute "CREATE TABLE IF NOT EXISTS stats(time DATETIME, visits INT)"
     #@db.execute "DELETE FROM stats"
-    
+
     @time = Time.now
   end
 
@@ -28,28 +28,28 @@ class Parser
     lenta_count = lenta_count.gsub(/\D/, '').to_i
     @db.execute "INSERT INTO stats VALUES('#{@time}', #{lenta_count})"
   end
-  
+
   def plot
     # Preparing data
     sql = "SELECT * from STATS WHERE time > CAST('#{@time.strftime "%Y%m"}01' as datetime) ORDER BY time ASC"
     data = @db.execute(sql)
-    
+
     points = data.map(&:last)
     labels = {}
     data.map(&:first).each_with_index do |t, i|
       time = Time.parse(t)
       labels[i] = sprintf("%02d",time.day)
     end
-    
+
     # Plotting graph
     g = Gruff::Bar.new(2000)
-    g.title = "LiveInternet - #{@time.strftime "%B %Y"}" 
+    g.title = "LiveInternet - #{@time.strftime "%B %Y"}"
     g.labels = labels
     g.data 'Lenta.Ru', points
     g.marker_font_size = 11
     g.write "graphs/#{@time.strftime "%Y-%m"}.png"
   end
-  
+
   def log_page
     `curl --silent -o pages/#{@time.strftime "%Y-%m-%d"}.html #{URL}`
   end
@@ -65,9 +65,9 @@ class Parser
         "to" =>
            [
              {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
-             {"email"=>"akrasnoschekov@gmail.com", "type"=>"to"},
-             {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
-             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
+             {"email"=>"akrasnoschekov@gmail.com", "type"=>"to"}
+             # {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
+             # {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
            ]
       }
       async = false
@@ -82,7 +82,7 @@ class Parser
 
   def run
     puts '='*20
-    
+
     puts "#{Time.now} parsing page"
     parse
 
