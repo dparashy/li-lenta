@@ -66,9 +66,9 @@ class Parser
            [
              {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
              {"email"=>"akrasnoschekov@gmail.com", "type"=>"to"},
-             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"}
-             # {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
-             # {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
+             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
+             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
            ]
       }
       async = false

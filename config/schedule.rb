@@ -5,7 +5,7 @@
 
 RBENV_INIT = 'export PATH=/home/deployer/.rbenv/shims:/home/deployer/.rbenv/bin:$PATH;eval "$(rbenv init -)";'
 
-every 1.day, :at => "17:00" do
+every 1.day, :at => "23:55" do
   command RBENV_INIT + 'cd /home/deployer/listat/current && bundle exec ruby parser.rb >> crontab.log 2>&1'
 end
 
