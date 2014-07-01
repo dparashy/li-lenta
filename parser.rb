@@ -1,4 +1,3 @@
-# 55 23 * * * /bin/bash -l -c 'cd /home/sol/development/li && script/runner -e production '\''Parser.new.run'\'''
 #!/usr/bin/ruby
 
 require 'sqlite3'
@@ -10,10 +9,12 @@ require 'mandrill'
 class Parser
 
   URL = "http://www.li.ru/rating/media/"
+  DB_PATH = '/home/deployer/listat/'
+  DB_NAME = 'li.sqlite3'
 
   def initialize
-    SQLite3::Database.new 'li.sqlite3'
-    @db = SQLite3::Database.open 'li.sqlite3'
+    dbfile = File.directory?(DB_PATH + DB_NAME) ? DB_PATH + DB_NAME : DB_NAME
+    @db = SQLite3::Database.open dbfile
     @db.execute "CREATE TABLE IF NOT EXISTS stats(time DATETIME, visits INT)"
     #@db.execute "DELETE FROM stats"
 
@@ -64,11 +65,12 @@ class Parser
         "from_name" => "Lenta Statistics",
         "to" =>
            [
-             {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
-             {"email"=>"akrasnoschekov@gmail.com", "type"=>"to"},
-             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.ryazantsev@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.goreslavskiy@lenta-co.ru", "type"=>"to"},
              {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
-             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"}
+             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"}
            ]
       }
       async = false
@@ -84,17 +86,17 @@ class Parser
   def run
     puts '='*20
 
-    puts "#{Time.now} parsing page"
-    parse
-
-    puts "#{Time.now} plotting graphic"
-    plot
-
     puts "#{Time.now} logging page"
     log_page
 
     puts "#{Time.now} mailing  page"
     mail_page
+
+    puts "#{Time.now} parsing page"
+    parse
+
+    puts "#{Time.now} plotting graphic"
+    plot
 
     puts "#{Time.now} all done"
     @db.close
