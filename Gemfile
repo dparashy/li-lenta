@@ -5,6 +5,8 @@ gem 'nokogiri'
 gem 'gruff'
 gem 'whenever'
 gem 'mandrill-api'
+gem 'tzinfo-data'
+gem 'tzinfo'
 
 group :deployment do
   gem 'capistrano', '~> 3.1'
