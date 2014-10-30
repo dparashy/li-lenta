@@ -65,12 +65,12 @@ class Parser
         "from_name" => "Lenta Statistics",
         "to" =>
            [
-            #  {"email"=>"a.goreslavskiy@lenta-co.ru", "type"=>"to"},
-            #  {"email"=>"a.ryazantsev@lenta-co.ru", "type"=>"to"},
-            #  {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
-            #  {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"},
-            #  {"email"=>"a.gladkov@lenta-co.ru", "type"=>"to"},
-            #  {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.goreslavskiy@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.ryazantsev@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
+             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.gladkov@lenta-co.ru", "type"=>"to"},
+             {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
              {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"}
            ]
       }
