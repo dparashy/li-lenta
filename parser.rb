@@ -80,6 +80,7 @@ class Parser
       ip_pool = "Main Pool"
       send_at = nil
       result = mandrill.messages.send message, async, ip_pool, send_at
+      p result
     rescue Mandrill::Error => e
         puts "A mandrill error occurred: #{e.class} - #{e.message}"
         raise
