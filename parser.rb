@@ -72,6 +72,7 @@ class Parser
              {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"},
              {"email"=>"a.gladkov@lenta-co.ru", "type"=>"to"},
              {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
+             {"email"=>"n.morozov@lenta-co.ru", "type"=>"to"},
              {"email"=>"d.parashy@lenta-co.ru", "type"=>"to"},
              {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"}
            ]
