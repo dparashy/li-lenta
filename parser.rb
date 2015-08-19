@@ -2,13 +2,14 @@
 
 require 'sqlite3'
 require 'open-uri'
-require 'nokogiri'
 require 'gruff'
 require 'mandrill'
+require 'csv'
+require 'erb'
 
 class Parser
 
-  URL = "http://www.li.ru/rating/media/"
+  URL = "http://www.liveinternet.ru/rating/ru/media/today.tsv"
   DB_PATH = '/home/deployer/listat/'
   DB_NAME = 'li.sqlite3'
 
@@ -16,18 +17,36 @@ class Parser
     dbfile = File.directory?(DB_PATH + DB_NAME) ? DB_PATH + DB_NAME : DB_NAME
     @db = SQLite3::Database.open dbfile
     @db.execute "CREATE TABLE IF NOT EXISTS stats(time DATETIME, visits INT)"
-    #@db.execute "DELETE FROM stats"
-
     @time = Time.now
   end
 
+  def statistics
+    i = -1
+    @statistics ||= begin
+      stat = CSV.parse(open(URL), col_sep: "\t").map do |row|
+        {
+          number: i += 1,
+          name: row[0],
+          url: row[1],
+          title: row[2],
+          visitors: row[3]
+        }
+      end
+      stat.delete_at(0)
+      stat
+    end
+  end
+
+  def lenta_visitors
+    statistics.find{|d| d[:name] == 'lenta.ru'}[:visitors]
+  end
+
+  def insert_stats
+    @db.execute "INSERT INTO stats VALUES('#{@time}', #{lenta_visitors})"
+  end
+
   def parse
-    # Parsing the stats
-    page = Nokogiri::HTML(open(URL))
-    lenta_link = page.xpath("//a[text()='Lenta.Ru']").first
-    lenta_count = lenta_link.parent.parent.xpath('td').last.text
-    lenta_count = lenta_count.gsub(/\D/, '').to_i
-    @db.execute "INSERT INTO stats VALUES('#{@time}', #{lenta_count})"
+    insert_stats
   end
 
   def plot
@@ -52,7 +71,8 @@ class Parser
   end
 
   def log_page
-    `curl --silent -o pages/#{@time.strftime "%Y-%m-%d"}.html #{URL}`
+    file = ::ERB.new(File.read('templates/page.html.erb')).result(binding)
+    File.open("pages/#{@time.strftime "%Y-%m-%d"}.html", 'w') { |f| f.write(file) }
   end
 
   def mail_page
@@ -71,10 +91,8 @@ class Parser
              {"email"=>"p.kamenchenko@lenta-co.ru", "type"=>"to"},
              {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"},
              {"email"=>"a.gladkov@lenta-co.ru", "type"=>"to"},
-             {"email"=>"a.lomakin@lenta-co.ru", "type"=>"to"},
              {"email"=>"n.morozov@lenta-co.ru", "type"=>"to"},
              {"email"=>"d.parashy@lenta-co.ru", "type"=>"to"},
-             {"email"=>"a.krasnoshchekov@lenta-co.ru", "type"=>"to"}
            ]
       }
       async = false

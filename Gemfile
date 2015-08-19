@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
 gem 'sqlite3'
-gem 'nokogiri'
 gem 'gruff'
 gem 'whenever'
 gem 'mandrill-api'

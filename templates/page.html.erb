@@ -1,0 +1,14 @@
+<table>
+  <tr>
+    <th>#</th>
+    <th>Название</th>
+    <th>Посетители</th>
+  </tr>
+  <% statistics.each do |site| %>
+    <tr>
+      <td><%= site[:number] %></td>
+      <td><a href="http://<%= site[:url] %>"><%= site[:title] %></a></td>
+      <td><%= site[:visitors] %></td>
+    </tr>
+  <% end %>
+</table>
