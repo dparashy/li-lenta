@@ -6,10 +6,11 @@ require 'gruff'
 require 'mandrill'
 require 'csv'
 require 'erb'
+require 'yaml'
 
 class Parser
 
-  URL = "http://www.liveinternet.ru/rating/ru/media/today.tsv"
+  URL = 'http://www.liveinternet.ru/rating/media/today.tsv'
   DB_PATH = '/home/deployer/listat/'
   DB_NAME = 'li.sqlite3'
 
@@ -21,19 +22,15 @@ class Parser
   end
 
   def statistics
-    i = -1
-    @statistics ||= begin
-      stat = CSV.parse(open(URL), col_sep: "\t").map do |row|
-        {
-          number: i += 1,
-          name: row[0],
-          url: row[1],
-          title: row[2],
-          visitors: row[3]
-        }
-      end
-      stat.delete_at(0)
-      stat
+    i = 0
+    @statistics ||= CSV.parse(open(URL), col_sep: "\t", headers: true, skip_blanks: true).map do |row|
+      {
+        number: i += 1,
+        name: row[0],
+        url: row[1],
+        title: row[2],
+        visitors: row[3]
+      }
     end
   end
 
@@ -75,28 +72,22 @@ class Parser
     File.open("pages/#{@time.strftime "%Y-%m-%d"}.html", 'w') { |f| f.write(file) }
   end
 
+  def config
+    @config ||= YAML.load_file('config/mandrill.yml')
+  end
+
   def mail_page
     begin
-      mandrill = Mandrill::API.new '8Xx06y45dEkqk1wJMdUilg'
+      mandrill = Mandrill::API.new(config['api_key'])
       message = {
-        "html" => File.read("pages/#{@time.strftime "%Y-%m-%d"}.html"),
-        "subject" => "Lenta.Ru@LiveInternet #{@time.strftime "%Y-%m-%d"}",
-        "from_email" => "noreply-stats@lenta-co.ru",
-        "from_name" => "Lenta Statistics",
-        "to" =>
-           [
-             {"email"=>"a.goreslavskiy@lenta-co.ru", "type"=>"to"},
-             {"email"=>"a.ryazantsev@lenta-co.ru", "type"=>"to"},
-             {"email"=>"a.belonovsky@lenta-co.ru", "type"=>"to"},
-             {"email"=>"p.kamenchenko@lenta-co.ru", "type"=>"to"},
-             {"email"=>"v.kobenkova@lenta-co.ru", "type"=>"to"},
-             {"email"=>"a.gladkov@lenta-co.ru", "type"=>"to"},
-             {"email"=>"n.morozov@lenta-co.ru", "type"=>"to"},
-             {"email"=>"d.parashy@lenta-co.ru", "type"=>"to"},
-           ]
+        html: File.read("pages/#{@time.strftime "%Y-%m-%d"}.html"),
+        subject: "Lenta.Ru@LiveInternet #{@time.strftime "%Y-%m-%d"}",
+        from_email: 'noreply-stats@lenta-co.ru',
+        from_name: 'Lenta Statistics',
+        to: config['to'].map { |email| { email: email, type: 'to' } }
       }
       async = false
-      ip_pool = "Main Pool"
+      ip_pool = 'Main Pool'
       send_at = nil
       result = mandrill.messages.send message, async, ip_pool, send_at
       p result
@@ -112,7 +103,7 @@ class Parser
     puts "#{Time.now} logging page"
     log_page
 
-    puts "#{Time.now} mailing  page"
+    puts "#{Time.now} mailing page"
     mail_page
 
     puts "#{Time.now} parsing page"
