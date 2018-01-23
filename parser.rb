@@ -10,7 +10,7 @@ require 'yaml'
 
 class Parser
 
-  URL = 'http://www.liveinternet.ru/rating/media/today.tsv'
+  URL = 'https://www.liveinternet.ru/rating/media/today.tsv'
   DB_PATH = '/home/deployer/listat/'
   DB_NAME = 'li.sqlite3'
 
